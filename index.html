@@ -8,7 +8,7 @@
       content="Kang Chen, Professor in the School of Computer Science at Peking University, researches operating systems, storage systems, and ubiquitous operating systems."
     />
     <link rel="canonical" href="https://kangchenpku.github.io/" />
-    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsPSLpmYjlurciPgogIDxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0iIzg2MmQzYyIvPgogIDx0ZXh0IHg9IjMyIiB5PSI0MiIgZmlsbD0iI2ZmZmRmOCIgZm9udC1mYW1pbHk9InNlcmlmIiBmb250LXNpemU9IjM0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7pmYg8L3RleHQ+Cjwvc3ZnPgo=" type="image/svg+xml" />
     <style>
 :root {
   color-scheme: light;
@@ -69,11 +69,11 @@ html[data-language="zh"] .lang-zh {
 }
 
 .language-toggle {
-  position: fixed;
-  top: 16px;
-  right: 20px;
+  position: absolute;
+  top: 40px;
+  right: 55px;
   z-index: 20;
-  min-width: 58px;
+  min-width: 112px;
   padding: 7px 12px;
   color: #24292f;
   background: rgba(255, 255, 255, 0.96);
@@ -154,6 +154,7 @@ html[data-language="zh"] .lang-zh {
 }
 
 .content {
+  position: relative;
   flex: 1;
   width: min(100%, 980px);
   max-width: 980px;
@@ -175,6 +176,7 @@ h2 {
 
 .about h2 {
   margin-top: 0;
+  padding-right: 150px;
 }
 
 h2 > span[aria-hidden="true"] {
@@ -252,6 +254,70 @@ a:hover {
   white-space: nowrap;
 }
 
+.publication-tabs {
+  display: flex;
+  gap: 4px;
+  margin: -3px 0 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.publication-tab {
+  appearance: none;
+  margin: 0 0 -1px;
+  padding: 9px 13px;
+  color: var(--muted);
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.publication-tab:hover {
+  color: var(--link);
+}
+
+.publication-tab[aria-selected="true"] {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.publication-tab:focus-visible {
+  outline: 2px solid var(--link);
+  outline-offset: 2px;
+}
+
+.publication-panel[hidden] {
+  display: none;
+}
+
+.publication-group {
+  margin-top: 26px;
+}
+
+.publication-panel > .publication-group:first-child {
+  margin-top: 0;
+}
+
+.publication-group h3 {
+  margin: 0 0 12px;
+  color: #30363d;
+  font-size: 18px;
+  line-height: 1.45;
+}
+
+.full-publication-list {
+  padding-left: 26px;
+  font-size: 14.5px;
+}
+
+.full-publication-list li {
+  margin-bottom: 13px;
+  line-height: 1.58;
+}
+
 @media (max-width: 800px) {
   .page-shell {
     display: block;
@@ -283,6 +349,11 @@ a:hover {
     padding: 30px 24px 48px;
   }
 
+  .language-toggle {
+    top: 30px;
+    right: 24px;
+  }
+
   .intro {
     text-align: left;
   }
@@ -294,8 +365,8 @@ a:hover {
   }
 
   .language-toggle {
-    top: 12px;
-    right: 14px;
+    top: 26px;
+    right: 20px;
   }
 
   .sidebar {
@@ -320,6 +391,10 @@ a:hover {
     font-size: 19px;
   }
 
+  .about h2 {
+    padding-right: 145px;
+  }
+
   .intro {
     font-size: 15px;
   }
@@ -339,15 +414,6 @@ a:hover {
       <span class="lang-en" lang="en">Skip to main content</span>
       <span class="lang-zh" lang="zh-CN">跳到主要内容</span>
     </a>
-
-    <button
-      class="language-toggle"
-      id="language-toggle"
-      type="button"
-      aria-label="切换到中文"
-    >
-      中文
-    </button>
 
     <div class="page-shell">
       <aside
@@ -391,6 +457,15 @@ a:hover {
       </aside>
 
       <main id="main-content" class="content">
+        <button
+          class="language-toggle"
+          id="language-toggle"
+          type="button"
+          aria-label="切换到中文"
+        >
+          切换到中文
+        </button>
+
         <section class="about" aria-labelledby="about-title">
           <h2 id="about-title">
             <span aria-hidden="true">👤</span>
@@ -527,10 +602,44 @@ a:hover {
       <section id="publications" aria-labelledby="publications-title">
         <h2 id="publications-title">
           <span aria-hidden="true">📄</span>
-          <span class="lang-en" lang="en">Selected Publications</span>
-          <span class="lang-zh" lang="zh-CN">代表性论文</span>
+          <span class="lang-en" lang="en">Publications</span>
+          <span class="lang-zh" lang="zh-CN">论文</span>
         </h2>
-        <div class="publications">
+        <div class="publication-tabs" role="tablist" aria-label="Publication view">
+          <button
+            class="publication-tab"
+            id="selected-publications-tab"
+            type="button"
+            role="tab"
+            aria-selected="true"
+            aria-controls="selected-publications"
+            data-publication-view="selected"
+          >
+            <span class="lang-en" lang="en">Selected Publications</span>
+            <span class="lang-zh" lang="zh-CN">代表性论文</span>
+          </button>
+          <button
+            class="publication-tab"
+            id="full-publications-tab"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="full-publications"
+            data-publication-view="full"
+          >
+            <span class="lang-en" lang="en">Full Publications</span>
+            <span class="lang-zh" lang="zh-CN">全部论文</span>
+          </button>
+        </div>
+
+        <div
+          class="publication-panel"
+          id="selected-publications"
+          role="tabpanel"
+          aria-labelledby="selected-publications-tab"
+          data-publication-view="selected"
+        >
+          <div class="publications">
           <p>
             <strong>[NSDI ’27]</strong> “MetaDB: Putting File-System Structure Back into Distributed Databases”，Zebin Ren, Biao Cao, Kang Chen, et al. NSDI 2027.
           </p>
@@ -603,7 +712,114 @@ a:hover {
           <p>
             <strong>[OSDI ’16]</strong> “Exploring the Hidden Dimension in Graph Processing”，Mingxing Zhang, Yongwei Wu, Kang Chen, Xuehai Qian, Xue Li, and Weimin Zheng. OSDI 2016.
           </p>
+          </div>
         </div>
+      <!-- FULL_PUBLICATIONS_START -->
+        <div
+          class="publication-panel"
+          id="full-publications"
+          role="tabpanel"
+          aria-labelledby="full-publications-tab"
+          data-publication-view="full"
+          hidden
+        >
+        <div class="publication-group">
+          <h3>
+            <span class="lang-en" lang="en">Operating Systems</span>
+            <span class="lang-zh" lang="zh-CN">操作系统</span>
+          </h3>
+          <ol class="full-publication-list">
+            <li>Kaifu Tian, Youjie Zheng, Yiren Zhang, Yuyang You, Keyang Hu, <strong>Kang Chen</strong>, and Yu Chen. 2026. Turning Linux into a High-Performance Library OS with Flux. In ACM SIGOPS 32nd Symposium on Operating Systems Principles (SOSP ’26), September 29–October 2, 2026, Prague, Czechia.</li>
+            <li>Liu Jun, Liu Jingxuan, Shenghao Yuan, David Sanan, <strong>Chen Kang</strong>, Cao Donggang and Yongwang Zhao, Formal Verification of a Memory Allocator for Rust Hypervisors: From Verified to Deployable Code with Functional Equivalence Guarantees, Formal Methods in Computer-Aided Design 2026 (FMCAD2026), Sep. 14 - 18, Graz, Austria.</li>
+            <li>Mu Wang, Yiying Lin, Enhuan Dong, Shenghui Wei, <strong>Kang Chen</strong>, Tong Li, Yinchao Zhang, Renjie Xie, Su Yao, Ke Xu, Changqiao Xu, Forewarned is Forearmed: A Responsive Congestion Control with Non-intrusive Uplink Dynamics Capture, In Proceedings of the Annual conference of the ACM Special Interest Group on Data Communication on the applications, technologies, architectures, and protocols for computer communication (SIGCOMM2026).</li>
+            <li>Yiming Li, Laiping Zhao, Zhiyuan Su, Guowei Liu, Wenhao Huang, <strong>Kang Chen</strong>, Zhaolin Duan, Jingjie Zong, Wenxin Li, Deze Zeng, Dong Zhang, Wenyu Qu, iRoute: Local Routing Table-based Workflow Management in Serverless Computing, In European Conference on Computer Systems (EuroSys 2026). ACM, 2026.</li>
+            <li>Xiaohu Chai, Keyang Hu, Jianfeng Tan, Tiwei Bie, Guotao Tan, Tianyu Zhou, Anqi Shen, Dawei Shen, Xinyao Yang, Xin Chen, Xu Wang, Feng Yu, Zhengyu He, Dong Du, Yubin Xia, <strong>Kang Chen</strong>, Yu Chen, SKernel: An Elastic and Efficient Secure Container System at Scale with a Split-Kernel Architecture, In European Conference on Computer Systems (EuroSys 2026). ACM, 2026.</li>
+            <li>Wenhao Huang, Zhaolin Duan, Laiping Zhao, Yuhao Zhang, Yanjie Wang, Yiming Li, Yihan Wang, Yichi Chen, Zhihang Tang, <strong>Kang Chen</strong>, Deze Zeng, Wenxin Li, Keqiu Li, μShare: Non-Intrusive Kernel Co-Locating on NVIDIA GPUs, IEEE International Symposium on High-Performance Computer Architecture (HPCA) 2026</li>
+            <li>Yinchao Zhang, Su Yao, Yong Feng, <strong>Kang Chen</strong>, Tong Li, Zhuotao Liu, Yi Zhao, Lexuan Zhang, Xiangyu Gao, Feng Xiong, Qi Li, Ke Xu. Pegasus: A Universal Framework for Scalable Deep Learning Inference on the Dataplane[C]. In Proceedings of the Annual conference of the ACM Special Interest Group on Data Communication on the applications, technologies, architectures, and protocols for computer communication (SIGCOMM2025), September 8-11, 2025.</li>
+            <li>Pucheng Dang, Di Huang, Dong Li, <strong>Kang Chen</strong>, Yuanbo Wen, Qi Guo and Xing Hu, MigGPT: Harnessing Large Language Models for Automated Migration of Out-of-Tree Linux Kernel Patches Across Versions, the Thirty-Ninth Annual Conference on Neural Information Processing Systems (NeurIPS 2025), San Diego, CA, USA, 2025. (Hightlight)</li>
+            <li>Xiaohu Chai, Tianyu Zhou, Keyang Hu, Jianfeng Tan, Tiwei Bie, Anqi Shen, Dawei Shen, Qi Xing, Shun Song, Tongkai Yang, Le Gao, Feng Yu, Zhengyu He, Dong Du, Yubin Xia, <strong>Kang Chen</strong>, Yu Chen, Fork in the Road: Reflections and Optimizations for Cold Start Latency in Production Serverless Systems. In Proceedings of the 19th Symposium on Operating Systems Design and Implementation (OSDI 2025), 2025.</li>
+            <li>Jianing You, <strong>Kang Chen</strong>, Laiping Zhao, Yiming Li, Yichi Chen, Yuxuan Du, Yanjie Wang, Luhang Wen, Keyang Hu, Keqiu Li, AlloyStack: A Library Operating System for Serverless Workflow Applications, In European Conference on Computer Systems (EuroSys 2025). ACM, 2025.</li>
+            <li>Yuekai Jia, Kaifu Tian, Yuyang You, Yu Chen, and <strong>Kang Chen</strong>. Skyloft: A general high-efficiency scheduling framework in user space. In Proceedings of the 30th Symposium on Operating Systems Principles (SOSP 2024), 2024.</li>
+            <li>Jialiang Huang, MingXing Zhang, Teng Ma, Zheng Liu, Sixing Lin, <strong>Kang Chen</strong>, Jinlei Jiang, Xia Liao, Yingdi Shan, Ning Zhang, Mengting Lu, Tao Ma, Haifeng Gong, and YongWei Wu. TrEnv: Transparently share serverless execution environments across different functions and nodes. In Proceedings of the 30th Symposium on Operating Systems Principles (SOSP 2024), 2024.</li>
+            <li>Feng Ren, Mingxing Zhang, <strong>Kang Chen</strong>, Huaxia Xia, Zuoning Chen, and Yongwei Wu. Scaling up memory disaggregated applications with SMART. In Proceedings of the 29th ACM International Conference on Architectural Support for Programming Languages and Operating Systems(ASPLOS 2024), 2024.</li>
+            <li>Kai Ma, Cheng Li, Enzuo Zhu, Ruichuan Chen, Feng Yan, and <strong>Kang Chen</strong>. Noctua: Towards practical and automated fine-grained consistency analysis. In European Conference on Computer Systems (EuroSys 2024). ACM, 2024.</li>
+            <li>Mingxing Zhang, Teng Ma, Jinqi Hua, Zheng Liu, <strong>Kang Chen</strong>, Ning Ding, Fan Du, Jinlei Jiang, Tao Ma, and Yongwei Wu. Partial failure resilient memory management system for (CXL-based) distributed shared memory. In Proceedings of the 29th Symposium on Operating Systems Principles (SOSP 2023), pages 658–674, 2023.</li>
+            <li>Teng Ma, <strong>Kang Chen</strong>, Shaonan Ma, Zhuo Song, and Yongwei Wu. Thinking more about RDMA memory semantics. In 2021 IEEE International Conference on Cluster Computing (CLUSTER 2021), pages 456–467. IEEE, 2021.</li>
+            <li>Youren Shen, Hongliang Tian, Yu Chen, <strong>Kang Chen</strong>, Runji Wang, Yi Xu, Yubin Xia, and Shoumeng Yan. Occlum: Secure and efficient multitasking inside a single enclave of Intel SGX. In Proceedings of the Twenty-Fifth International Conference on Architectural Support for Programming Languages and Operating Systems (ASPLOS2020), pages 955–970, 2020.</li>
+            <li>Teng Ma, Tao Ma, Zhuo Song, Jingxuan Li, Huaixin Chang, <strong>Kang Chen</strong>, Hai Jiang, and Yongwei Wu. X-rdma: Effective RDMA middleware in large-scale production environments. In 2019 IEEE International Conference on Cluster Computing (CLUSTER 2019), pages 1–12. IEEE, 2019.</li>
+            <li>Yongwei Wu, Teng Ma, Maomeng Su, Mingxing Zhang, <strong>Kang Chen</strong>, and Zhenyu Guo. RF-RPC: Remote fetching RPC paradigm for RDMA-enabled network. IEEE Transactions on Parallel and Distributed Systems (IEEE TPDS 2018), 30(7):1657–1671, 2018.</li>
+            <li>Youren Shen, Yu Chen, <strong>Kang Chen</strong>, Hongliang Tian, and Shoumeng Yan. To isolate, or to share? that is a question for Intel SGX. In Proceedings of the 9th Asia-Pacific Workshop on Systems (APSys 2018), pages 1–8, 2018.</li>
+            <li>Maomeng Su, Mingxing Zhang, <strong>Kang Chen</strong>, Zhenyu Guo, and Yongwei Wu. RFP: When RPC is faster than server-bypass with RDMA. In Proceedings of the Twelfth European Conference on Computer Systems (EuroSys2017), pages 1–15, 2017.</li>
+            <li>Zuo-Ning Chen, <strong>Kang Chen</strong>, Jin-Lei Jiang, Lu-Fei Zhang, Song Wu, Zheng-Wei Qi, Chun-Ming Hu, Yong-Wei Wu, Yu-Zhong Sun, Hong Tang, et al. Evolution of cloud operating system: from technology to ecosystem. Journal of Computer Science and Technology (JCST 2017), 32:224–241, 2017.</li>
+            <li>Weichao Guo, <strong>Kang Chen</strong>, Huan Feng, Yongwei Wu, Rui Zhang, and Weimin Zheng. MARS: Mobile application relaunching speed-up through flash-aware page swapping. IEEE Transactions on Computers (IEEE ToC 2015), 65(3):916–928, 2015.</li>
+            <li>Mingxing Zhang, Yongwei Wu, <strong>Kang Chen</strong>, and Weimin Zheng. What is wrong with the transmission? a comprehensive study on message passing related bugs. In 2015 44th International Conference on Parallel Processing (ICPP 2015), pages 410–419. IEEE, 2015.</li>
+            <li>Weichao Guo, <strong>Kang Chen</strong>, Yongwei Wu, and Weimin Zheng. Bidding for highly available services with low price in spot instance market. In Proceedings of the 24th International Symposium on High-Performance Parallel and Distributed Computing (HPDC 2015), pages 191–202, 2015.</li>
+          </ol>
+        </div>
+        <div class="publication-group">
+          <h3>
+            <span class="lang-en" lang="en">Storage Systems</span>
+            <span class="lang-zh" lang="zh-CN">存储系统</span>
+          </h3>
+          <ol class="full-publication-list">
+            <li>Zebin Ren, Biao Cao, <strong>Kang Chen</strong>, Zhihui Yin, Qiushi Chen, Jielong Jian, Jiwei Xiong, Xinxing Wang, Yan Xing, Liguo Duan, Ran Zheng, Xianjun Meng, Zhenyu Hou, MetaDB: Putting File-System Structure Back into Distributed Databases, 24th USENIX Symposium on Networked Systems Design and Implementation (NSDI2027), May 11–13, 2027 Providence, RI, USA.</li>
+            <li>Luofan Chen, Jiyang Wang, Guoyu Wang, Chongzhuo Yang, Sam H. Noh, <strong>Kang Chen</strong>, Cheng Li, PipeBWrite: Shortening the Buffered Write Critical Path with Deferred Non-Critical Steps, 25th USENIX Conference on File and Storage Technologies (FAST2027), February 23–25, 2027 Renton, WA, USA.</li>
+            <li>Jiahao Li, Biao Cao, Jielong Jian, Cheng Li, Sen Han, Yiduo Wang, Yufei Wu, <strong>Kang Chen</strong>, Liguo Duan, Jie Zhao, Zhihui Yin, Qiushi Chen, Jiwei Xiong, Fengyuan Liu, Yan Xing, Ran Zheng, Miao Yu, Feng Wu, Xianjun Meng, Mantle: Efficient Hierarchical Metadata Management for Cloud Object Storage Services, In Proceedings of 31st Symposium on Operating Systems Principles (SOSP2025). October 13 – 16, 2025.</li>
+            <li>Xun Sun, Mingxing Zhang, Yingdi Shan, <strong>Kang Chen</strong>, Jinlei Jiang, Yongwei Wu, Scalio: Scaling up DPU-based JBOF Key-value Store with NVME-oF Target Offload. In Proceedings of the 19th Symposium on Operating Systems Design and Implementation (OSDI 2025), 2025.</li>
+            <li>Zhicheng Ji, <strong>Kang Chen</strong>, Leping Wang, Mingxing Zhang, and Yongwei Wu. Falcon: Fast OLTP engine for persistent cache and non-volatile memory. In Proceedings of the 29th Symposium on Operating Systems Principles (SOSP 2023), pages 531–544, 2023.</li>
+            <li>Yingdi Shan, <strong>Kang Chen</strong>, and Yongwei Wu. Explore data placement algorithm for balanced recovery load distribution. In 2023 USENIX Annual Technical Conference (USENIX ATC 23), pages 233–240, 2023.</li>
+            <li>Shaonan Ma, Teng Ma, <strong>Kang Chen</strong>, and Yongwei Wu. A survey of storage systems in the RDMA era. IEEE Transactions on Parallel and Distributed Systems (IEEE TPDS 2022), 33(12):4395–4409, 2022.</li>
+            <li>Qi Chen, Shaonan Ma, <strong>Kang Chen</strong>, Teng Ma, Xin Liu, Dexun Chen, Yongwei Wu, and Zuoning Chen. SeqDLM: a sequencer-based distributed lock manager for efficient shared file access in a parallel file system. In International Conference for High Performance Computing, Networking, Storage and Analysis (SC 2022), pages 1–14. IEEE, 2022.</li>
+            <li>Feng Ren, <strong>Kang Chen</strong>, and Yongwei Wu. libcrpm: Improving the checkpoint performance of nvm. In Proceedings of the 59th ACM/IEEE Design Automation Conference (DAC 2022), pages 811–816, 2022.</li>
+            <li>Yingdi Shan, <strong>Kang Chen</strong>, Tuoyu Gong, Lidong Zhou, Tai Zhou, and Yongwei Wu. Geometric partitioning: Explore the boundary of optimal erasure code repair. In Proceedings of the ACM SIGOPS 28th Symposium on Operating Systems Principles (SOSP 2021), pages 457–471, 2021.</li>
+            <li>Shaonan Ma, <strong>Kang Chen</strong>, Shimin Chen, Mengxing Liu, Jianglang Zhu, Hongbo Kang, and Yongwei Wu. ROART: Range-query optimized persistent ART. In 19th USENIX Conference on File and Storage Technologies (FAST 2021), pages 1–16, 2021.</li>
+            <li>Teng Ma, Mingxing Zhang, <strong>Kang Chen</strong>, Zhuo Song, Yongwei Wu, and Xuehai Qian. AsymNVM: An efficient framework for implementing persistent data structures on asymmetric nvm architecture. In Proceedings of the Twenty-Fifth International Conference on Architectural Support for Programming Languages and Operating Systems (ASPLOS2020), pages 757–773, 2020.</li>
+            <li>Qi Chen, <strong>Kang Chen</strong>, Zuo-Ning Chen, Wei Xue, Xu Ji, and Bin Yang. Lessons learned from optimizing the Sunway storage system for higher application I/O performance. Journal of Computer Science and Technology (JCST 2020), 35:47–60, 2020.</li>
+            <li>Mengxing Liu, Jiankai Xing, <strong>Kang Chen</strong>, and Yongwei Wu. Building scalable nvm-based b+ tree with htm. In Proceedings of the 48th International Conference on Parallel Processing (ICPP 2019), pages 1–10, 2019.</li>
+            <li>Mengxing Liu, Mingxing Zhang, <strong>Kang Chen</strong>, Xuehai Qian, Yongwei Wu, Weimin Zheng, and Jinglei Ren. DudeTX: Durable transactions made decoupled. ACM Transactions on Storage (ACM ToS 2018), 14(1):1–28, 2018.</li>
+            <li>Mengxing Liu, Mingxing Zhang, <strong>Kang Chen</strong>, Xuehai Qian, Yongwei Wu, Weimin Zheng, and Jinglei Ren. DudeTM: Building durable transactions with decoupling for persistent memory. In Proceedings of the ACM Twenty-Second International Conference on Architectural Support for Programming Languages and Operating Systems (ASPLOS 2017), page 329–343, New York, NY, USA, 2017.</li>
+            <li>Maomeng Su, Lei Zhang, Yongwei Wu, <strong>Kang Chen</strong>, and Keqin Li. Systematic data placement optimization in multi-cloud storage for complex requirements. IEEE Transactions on Computers (IEEE ToC 2015), 65(6):1964–1977, 2015.</li>
+            <li>Shuai Mu, <strong>Kang Chen</strong>, Yongwei Wu, and Weimin Zheng. When Paxos meets erasure code: Reduce network and storage cost in state machine replication. In Proceedings of the 23rd International Symposium on High-Performance Parallel and Distributed Computing (HPDC 2014), pages 61–72, 2014.</li>
+            <li>Yongwei Wu, Feng Ye, <strong>Kang Chen</strong>, and Weimin Zheng. Modeling of distributed file systems for practical performance analysis. IEEE Transactions on Parallel and Distributed Systems (IEEE TPDS 2013), 25(1):156–166, 2013.</li>
+            <li>Xun Zhao, Yang Zhang, Yongwei Wu, <strong>Kang Chen</strong>, Jinlei Jiang, and Keqin Li. Liquid: A scalable deduplication file system for virtual machine images. IEEE Transactions on Parallel and Distributed Systems (IEEE TPDS 2013), 25(5):1257–1266, 2013.</li>
+          </ol>
+        </div>
+        <div class="publication-group">
+          <h3>
+            <span class="lang-en" lang="en">Data Processing</span>
+            <span class="lang-zh" lang="zh-CN">数据处理</span>
+          </h3>
+          <ol class="full-publication-list">
+            <li>Luofan Chen, Chenhan Wang1, Weidong Zhang, Jinxin Chi, Hequan Zhang, Zanbo Wang, Chenyuan Wang, Lishu Luo, Sijin Wu, Junqi Hu, Jun Wang, Cheng Chen, Lixin Huang, Liyang Zhao, Yong Tian, Jun Guo, Youhui Bai, Wencong Xiao, <strong>Kang Chen</strong>, Cheng Li, Teaching The Old Dog New Tricks: Building Efficient Data Pipelines for Large-Scale LLM Pre-training, In Proceedings of the 20th Symposium on Operating Systems Design and Implementation (OSDI 2026), 2026, Jay Lepreau Best Paper Award.</li>
+            <li>Zhengyan Guo, Mingxing Zhang, Yingdi Shan, <strong>Kang Chen</strong>, Jinlei Jiang, Yongwei Wu. Accelerating Stream Processing Engines via Hardware Offloading. In Proceedings of the 2026 ACM SIGMOD (Special Interest Group on Management of Data) Conference (SIGMOD '26).</li>
+            <li>Zi-Xuan Fu, Jia-Ju Bai, Hong-Bo Feng, <strong>Kang Chen</strong>, One DBMS, Two Modes, and a Bunch of Bugs: Catching Logic Bugs in Distributed DBMSs via Differential Testing, In Proceedings of the 2026 ACM SIGMOD (Special Interest Group on Management of Data) Conference (SIGMOD '26).</li>
+            <li>Qian Xu, Juan Yang, Feng Zhang, Junda Pan, <strong>Kang Chen</strong>, Youren Shen, Amelie Chi Zhou, and Xiaoyong Du. 2025. Tribase: A Vector Data Query Engine for Reliable and Lossless Pruning Compression Using Triangle Inequalities. In Proceedings of the 2025 ACM SIGMOD (Special Interest Group on Management of Data) Conference (SIGMOD '25), June 2025, Article 82, 28 pages.</li>
+            <li>Shaoyuan Chen, Hongtao Chen, Shaonan Ma, Yajie Qin, Zheng Wang, Weiyu Xie, Mingxing Zhang, <strong>Kang Chen</strong>, Xia Liao, Yingdi Shan, Jinlei Jiang, Yongwei Wu (2025). Scaling Asynchronous Graph Query Processing via Partitioned Stateful Traversal Machines. ICDE 2025.</li>
+            <li>Hao Wu, Mingxing Zhang, <strong>Kang Chen</strong>, Xia Liao, Yingdi Shan, Yongwei Wu (2025). OOCC: One-round Optimistic Concurrency Control for Read-Only Disaggregated Transactions. ICDE 2025.</li>
+            <li>Qian Xu, Juan Yang, Feng Zhang, Zheng Chen, Jiawei Guan, <strong>Kang Chen</strong>, Ju Fan, Youren Shen, Ke Yang, Yu Zhang, and Xiaoyong Du. Improving graph compression for efficient resource-constrained graph analytics. In Proceedings of the 50th International Conference on Very Large Databases (VLDB 2024), 2024.</li>
+            <li>Weiyu Xie, Mingxing Zhang, Xia Liao, <strong>Kang Chen</strong>, Jinlei Jiang, Yongwei Wu, VertexSurge: Variable Length Graph Pattern Match on Billion-edge Graphs. In Proceedings of the 29th ACM International Conference on Architectural Support for Programming Languages and Operating Systems(ASPLOS 2024), 2024.</li>
+            <li>Shuke Wang, Mingxing Zhang, Ke Yang, <strong>Kang Chen</strong>, Shaonan Ma, Jinlei Jiang, and Yongwei Wu. Noswalker: A decoupled architecture for out-of-core random walk processing. In Proceedings of the 28th ACM International Conference on Architectural Support for Programming Languages and Operating Systems (ASPLOS 2023), pages 466–482, 2023.</li>
+            <li>Hongtao Chen, Mingxing Zhang, Ke Yang, <strong>Kang Chen</strong>, Albert Zomaya, Yongwei Wu, and Xuehai Qian. Achieving sub-second pairwise query over evolving graphs. In Proceedings of the 28th ACM International Conference on Architectural Support for Programming Languages and Operating Systems (ASPLOS 2023), pages 1–15, 2023.</li>
+            <li>Chengying Huan, Shuaiwen Leon Song, Santosh Pandey, Hang Liu, Yongchao Liu, Baptiste Lepers, Changhua He, <strong>Kang Chen</strong>, Jinlei Jiang, and Yongwei Wu. TEA: a general-purpose temporal graph random walk engine. In Proceedings of the Eighteenth European Conference on Computer Systems (EuroSys 2023), pages 182–198, 2023.</li>
+            <li>Chengying Huan, Shuaiwen Leon Song, Yongchao Liu, Heng Zhang, Hang Liu, Charles He, <strong>Kang Chen</strong>, Jinlei Jiang, and Yongwei Wu. T-GCN: A sampling-based streaming graph neural network system with hybrid architecture. In Proceedings of the International Conference on Parallel Architectures and Compilation Techniques (PACT 2022), pages 69–82, 2022.</li>
+            <li>Chengying Huan, Hang Liu, Mengxing Liu, Yongchao Liu, Changhua He, <strong>Kang Chen</strong>, Jinlei Jiang, Yongwei Wu, and Shuaiwen Leon Song. TeGraph: A novel general-purpose temporal graph computing engine. In 2022 IEEE 38th International Conference on Data Engineering (ICDE 2022), pages 578–592. IEEE, 2022.</li>
+            <li>Ke Yang, Xiaosong Ma, Saravanan Thirumuruganathan, <strong>Kang Chen</strong>, and Yongwei Wu. Random walks on huge graphs at cache efficiency. In Proceedings of the ACM SIGOPS 28th Symposium on Operating Systems Principles (SOSP 2021), pages 311–326, 2021.</li>
+            <li>Xue Li, Mingxing Zhang, <strong>Kang Chen</strong>, Yongwei Wu, Xuehai Qian, and Weimin Zheng. 3-D partitioning for large-scale graph processing. IEEE Transactions on Computers (IEEE ToC 2021), 70(1):111–127, 2020.</li>
+            <li>Ke Yang, MingXing Zhang, <strong>Kang Chen</strong>, Xiaosong Ma, Yang Bai, and Yong Jiang. KnightKing: a fast distributed graph random walk engine. In Proceedings of the 27th ACM symposium on operating systems principles (SOSP2019), pages 524–537, 2019.</li>
+            <li>Zhiyuan Ai, Mingxing Zhang, Yongwei Wu, Xuehai Qian, <strong>Kang Chen</strong>, and Weimin Zheng. CLIP: A disk I/O focused parallel out-of-core graph processing system. IEEE Transactions on Parallel and Distributed Systems (IEEE TPDS 2018), 30(1):45–62, 2018.</li>
+            <li>Xue Li, Mingxing Zhang, <strong>Kang Chen</strong>, and Yongwei Wu. ReGraph: A graph processing framework that alternately shrinks and repartitions the graph. In Proceedings of the 2018 International Conference on Supercomputing (ICS 2018), pages 172–183, 2018.</li>
+            <li>Mingxing Zhang, Yongwei Wu, Youwei Zhuo, Xuehai Qian, Chengying Huan, and <strong>Kang Chen</strong>. Wonderland: A novel abstraction-based out-of-core graph processing system. In Proceedings of the Twenty-Third International Conference on Architectural Support for Programming Languages and Operating Systems (ASPLOS 2018), page 608–621, New York, NY, USA, 2018. Association for Computing Machinery.</li>
+            <li>Mingxing Zhang, Youwei Zhuo, Chao Wang, Mingyu Gao, Yongwei Wu, <strong>Kang Chen</strong>, Christos Kozyrakis, and Xuehai Qian. GraphP: Reducing communication for pim-based graph processing with efficient data partition. In 2018 IEEE International Symposium on High Performance Computer Architecture (HPCA 2018), pages 544–557. IEEE, 2018.</li>
+            <li>Zhiyuan Ai, Mingxing Zhang, Yongwei Wu, Xuehai Qian, <strong>Kang Chen</strong>, and Weimin Zheng. Squeezing out all the value of loaded data: An out-of-core graph processing system with reduced disk I/O. In 2017 USENIX annual technical conference (USENIX ATC 17), pages 125–137, 2017.</li>
+            <li>Pin Gao, Mingxing Zhang, <strong>Kang Chen</strong>, Yongwei Wu, and Weimin Zheng. High-performance graph processing with locality-oriented design. IEEE Transactions on Computers (IEEE ToC 2017), 66(7):1261–1267, 2017.</li>
+            <li>Mingxing Zhang, Yongwei Wu, <strong>Kang Chen</strong>, Xuehai Qian, Xue Li, and Weimin Zheng. Exploring the hidden dimension in graph processing. In 12th USENIX Symposium on Operating Systems Design and Implementation (OSDI 16), pages 285–300, 2016.</li>
+            <li>Mingxing Zhang, Yongwei Wu, <strong>Kang Chen</strong>, Teng Ma, and Weimin Zheng. Measuring and optimizing distributed array programs. Proceedings of the VLDB Endowment (VLDB 2016), 9(12):912–923, 2016.</li>
+            <li><strong>Kang Chen</strong>, Zhiteng Huang, Bingchen Li, Eric Huang, Hrabri L Rajic, Robert H Kuhn, and Wenguang Chen. Distributed file streamer: A framework for distributed application data coupling. In 2006 7th IEEE/ACM International Conference on Grid Computing (Grid 2006), pages 168–175. IEEE, 2006.</li>
+            <li>Haodi Feng, <strong>Kang Chen</strong>, Xiaotie Deng, and Weimin Zheng. Accessor variety criteria for Chinese word extraction. Computational Linguistics 2004, 30(1):75–93, 2004.</li>
+          </ol>
+        </div>
+        </div>
+      <!-- FULL_PUBLICATIONS_END -->
       </section>
       </main>
     </div>
@@ -613,12 +829,16 @@ a:hover {
       const pageRoot = document.documentElement;
       const profilePanel = document.querySelector(".sidebar");
       const profilePhoto = document.querySelector(".profile-photo");
+      const publicationTabs = [...document.querySelectorAll(".publication-tab")];
+      const publicationPanels = [...document.querySelectorAll(".publication-panel")];
 
       function setLanguage(language) {
         const isEnglish = language === "en";
         pageRoot.dataset.language = language;
         pageRoot.lang = isEnglish ? "en" : "zh-CN";
-        languageToggle.textContent = isEnglish ? "中文" : "English";
+        languageToggle.textContent = isEnglish
+          ? "切换到中文"
+          : "Switch to English";
         languageToggle.setAttribute(
           "aria-label",
           isEnglish ? "切换到中文" : "Switch to English"
@@ -640,7 +860,39 @@ a:hover {
         setLanguage(pageRoot.dataset.language === "en" ? "zh" : "en");
       });
 
+      function setPublicationView(view) {
+        publicationTabs.forEach((tab) => {
+          const isSelected = tab.dataset.publicationView === view;
+          tab.setAttribute("aria-selected", String(isSelected));
+          tab.tabIndex = isSelected ? 0 : -1;
+        });
+        publicationPanels.forEach((panel) => {
+          panel.hidden = panel.dataset.publicationView !== view;
+        });
+      }
+
+      publicationTabs.forEach((tab, index) => {
+        tab.addEventListener("click", () => {
+          setPublicationView(tab.dataset.publicationView);
+        });
+        tab.addEventListener("keydown", (event) => {
+          if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) {
+            return;
+          }
+          event.preventDefault();
+          let targetIndex = index;
+          if (event.key === "ArrowLeft") targetIndex = (index - 1 + publicationTabs.length) % publicationTabs.length;
+          if (event.key === "ArrowRight") targetIndex = (index + 1) % publicationTabs.length;
+          if (event.key === "Home") targetIndex = 0;
+          if (event.key === "End") targetIndex = publicationTabs.length - 1;
+          const targetTab = publicationTabs[targetIndex];
+          setPublicationView(targetTab.dataset.publicationView);
+          targetTab.focus();
+        });
+      });
+
       setLanguage("en");
+      setPublicationView("selected");
     </script>
   </body>
 </html>
